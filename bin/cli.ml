@@ -1,6 +1,33 @@
 open! Core
 open Cmdliner
 
+module Pick_cli = struct
+  open Lib.Pick
+
+  let cmd_name = "pick"
+
+  let in_btab_term =
+    let doc = "Input btab file" in
+    Arg.(
+      required & pos 0 (some non_dir_file) None & info [] ~docv:"IN_BTAB" ~doc)
+
+  let out_btab_term =
+    let doc = "Output btab file.  (Use /dev/stdout to write to stdout.)" in
+    Arg.(required & pos 1 (some string) None & info [] ~docv:"OUT_BTAB" ~doc)
+
+  let id_file_term =
+    let doc = "File with IDs to keep.  One ID per line!" in
+    Arg.(
+      required & pos 2 (some non_dir_file) None & info [] ~docv:"ID_FILE" ~doc)
+
+  let term = Term.(const Opts.v $ in_btab_term $ out_btab_term $ id_file_term)
+
+  let info =
+    let doc = "Pick records with query and target both in given ID file " in
+    let man = [] in
+    Cmd.info cmd_name ~doc ~man
+end
+
 module Top_hit_cli = struct
   open Lib.Top_hit
 
@@ -47,11 +74,16 @@ module Top_hit_cli = struct
 end
 
 module Subcommand = struct
-  type t = Top_hit of Lib.Top_hit.Opts.t [@@deriving variants]
+  type t = Top_hit of Lib.Top_hit.Opts.t | Pick of Lib.Pick.Opts.t
+  [@@deriving variants]
 
-  let top_hit =
+  let top_hit_cmd =
     let term = Term.(const top_hit $ Top_hit_cli.term) in
     Cmd.v Top_hit_cli.info term
 
-  let cmds = [ top_hit ]
+  let pick_cmd =
+    let term = Term.(const pick $ Pick_cli.term) in
+    Cmd.v Pick_cli.info term
+
+  let cmds = [ top_hit_cmd; pick_cmd ]
 end

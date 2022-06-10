@@ -1,12 +1,12 @@
 CLI errors.
 
   $ bm 
-  bm: required COMMAND name is missing, must be 'top_hit'.
+  bm: required COMMAND name is missing, must be either 'pick' or 'top_hit'.
   Usage: bm COMMAND …
   Try 'bm --help' for more information.
   [1]
   $ bm apple
-  bm: unknown command 'apple', must be 'top_hit'.
+  bm: unknown command 'apple', must be either 'pick' or 'top_hit'.
   Usage: bm COMMAND …
   Try 'bm --help' for more information.
   [1]

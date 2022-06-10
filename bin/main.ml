@@ -28,5 +28,6 @@ end
 let main () =
   match Root.parse_or_exit () with
   | Cli.Subcommand.Top_hit opts -> Lib.Top_hit.run opts
+  | Cli.Subcommand.Pick opts -> Lib.Pick.run opts
 
 let () = main ()
