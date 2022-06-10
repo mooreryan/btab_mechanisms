@@ -1,0 +1,8 @@
+(executable
+ (name main)
+ (public_name bm)
+ (instrumentation
+  (backend bisect_ppx))
+ (libraries bio_io core cmdliner lib)
+ (preprocess
+  (pps ppx_jane)))
