@@ -65,7 +65,11 @@ let get_top_hits fname best_method compare_column =
   let open Or_error.Let_syntax in
   let hits = Hashtbl.create (module String) in
   let%map () =
-    In_channel.with_file_iter_records fname ~f:(fun r ->
+    In_channel.with_file_iteri_records fname ~f:(fun i r ->
+        if Int.(i > 0 && i mod 200_000 = 0) then (
+          eprintf "READING %dk\r" (i / 1000);
+          Out_channel.flush Out_channel.stderr);
+
         let key = make_key r best_method in
         Hashtbl.update hits key ~f:(function
           | None -> r
@@ -99,8 +103,13 @@ module Opts = struct
 end
 
 let run Opts.{ in_btab; out_btab; best_method; compare_column } =
+  prerr_endline "LOG -- Reading records";
+
   let top_hits =
     Utils.value_or_exit ~tag:"get_top_hits failed"
     @@ get_top_hits in_btab best_method compare_column
   in
+
+  prerr_endline "LOG -- Writing records";
+
   print_records top_hits out_btab

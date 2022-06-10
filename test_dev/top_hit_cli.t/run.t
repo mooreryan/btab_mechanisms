@@ -26,6 +26,7 @@ CLI errors.
   Try 'bm top_hit --help' or 'bm --help' for more information.
   [1]
   $ bm top_hit bad.tsv pie
+  LOG -- Reading records
   ERROR -- ("get_top_hits failed" ("Caught exception" (Failure "Bad input")))
   [1]
   $ bm top_hit bad.tsv pie --best-method=apple 
