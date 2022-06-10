@@ -88,7 +88,16 @@ let print_records records out_btab =
     Out_channel.output_string oc [%string "%{s}\n"]
   in
   Out_channel.with_file out_btab ~f:(fun oc ->
-      Hashtbl.iter records ~f:(print_record oc))
+      let i = ref 0 in
+      Hashtbl.iter records ~f:(fun r ->
+          (* If the method is pair, writing is slow, so the logging is nice. *)
+          if Int.(!i > 0 && !i mod 200_000 = 0) then (
+            eprintf "READING %dk\r" (!i / 1000);
+            Out_channel.flush Out_channel.stderr);
+
+          Caml.incr i;
+
+          print_record oc r))
 
 module Opts = struct
   type t = {
