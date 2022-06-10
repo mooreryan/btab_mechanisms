@@ -36,9 +36,9 @@ module Compare_column = struct
   let default = Bits
 
   let to_search_record_field = function
-    | Bits -> Bio_io.Btab.Record.Fields.bits
-    | Pident -> Bio_io.Btab.Record.Fields.pident
-    | Evalue -> Bio_io.Btab.Record.Fields.evalue
+    | Bits -> Btab.Record.Fields.bits
+    | Pident -> Btab.Record.Fields.pident
+    | Evalue -> Btab.Record.Fields.evalue
 
   let is_new_better ~old ~new_ = function
     | Bits | Pident -> Float.(new_ > old)
@@ -52,7 +52,7 @@ module Compare_column = struct
 end
 
 let make_key record best_method =
-  let open Bio_io.Btab in
+  let open Btab in
   match best_method with
   | Best_method.Overall -> Record.query record
   | Pair ->
@@ -61,7 +61,7 @@ let make_key record best_method =
       q ^ t
 
 let get_top_hits fname best_method compare_column =
-  let open Bio_io.Btab in
+  let open Btab in
   let open Or_error.Let_syntax in
   let hits = Hashtbl.create (module String) in
   let%map () =
@@ -84,7 +84,7 @@ let get_top_hits fname best_method compare_column =
 
 let print_records records out_btab =
   let print_record oc r =
-    let s = Bio_io.Btab.Record.to_string r in
+    let s = Btab.Record.to_string r in
     Out_channel.output_string oc [%string "%{s}\n"]
   in
   Out_channel.with_file out_btab ~f:(fun oc ->

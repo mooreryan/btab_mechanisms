@@ -53,3 +53,12 @@ Hello world
   q2	t1	0.1	1	1	1	1	1	1	1	0.001	10.
   q2	t2	0.1	1	1	1	1	1	1	1	0.01	20.
   q2	t3	0.2	1	1	1	1	1	1	1	0.01	10.
+
+It works with btabs with qlen and tlen.
+
+  $ bm top_hit in_btab_len.tsv out_btab.tsv
+  LOG -- Reading records
+  LOG -- Writing records
+  $ sort out_btab.tsv
+  q1	t2	0.1	1	1	1	1	1	1	1	0.01	20.	100	2000
+  q2	t2	0.1	1	1	1	1	1	1	1	0.01	20.	200	2000
